@@ -1,22 +1,22 @@
 # Installation
 Install latest version using Golang (recommended)
 
-> go get -insecure github.com/lflxp//sflowtool
+> go get -insecure github.com/oleg-glushak//sflowtool
 
 # sflowtool
 sflow V5 and Netflow V5 parse by golang
 
 # SflowV5 Struct
 
-![](https://github.com/lflxp/sflowtool/blob/master/SflowV5.png)
+![](https://github.com/oleg-glushak/sflowtool/blob/master/SflowV5.png)
 
 # NetFlowV5 Struct
 
-![](https://github.com/lflxp/sflowtool/blob/master/NetflowV5.png)
+![](https://github.com/oleg-glushak/sflowtool/blob/master/NetflowV5.png)
 
 # Installation
 
-go get [github.com/lflxp//sflowtool](https://github.com/lflxp//sflowtool)
+go get [github.com/oleg-glushak//sflowtool](https://github.com/oleg-glushak//sflowtool)
 
 # Usage
 

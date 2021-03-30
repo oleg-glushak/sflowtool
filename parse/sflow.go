@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/elastic/beats/libbeat/common"
-	"github.com/lflxp/sflowtool/sflowV5"
+	"github.com/oleg-glushak/sflowtool/sflowV5"
 )
 
 func ParseSflowV5ToEs(sample *sflowV5.FlowSamples, counter *sflowV5.SFlowCounterSample) (string, error) {

@@ -6,8 +6,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/lflxp/sflowtool/collected"
-	"github.com/lflxp/sflowtool/parse"
+	"github.com/oleg-glushak/sflowtool/collected"
+	"github.com/oleg-glushak/sflowtool/parse"
 	log "github.com/sirupsen/logrus"
 )
 

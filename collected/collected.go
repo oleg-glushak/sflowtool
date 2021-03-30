@@ -7,9 +7,9 @@ import (
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
-	. "github.com/lflxp/sflowtool/netflowV5"
-	"github.com/lflxp/sflowtool/parse"
-	. "github.com/lflxp/sflowtool/sflowV5"
+	. "github.com/oleg-glushak/sflowtool/netflowV5"
+	"github.com/oleg-glushak/sflowtool/parse"
+	. "github.com/oleg-glushak/sflowtool/sflowV5"
 
 	//"github.com/Cistern/sflow"
 	"net"

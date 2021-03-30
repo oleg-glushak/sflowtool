@@ -1,4 +1,4 @@
-module github.com/lflxp/sflowtool
+module github.com/oleg-glushak/sflowtool
 
 go 1.14
 
