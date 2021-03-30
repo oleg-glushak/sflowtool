@@ -60,7 +60,7 @@ func InitEs(hostUrl, indexName string) {
 				mutex.Unlock()
 			case <-time.After(time.Nanosecond * 100):
 				if len(dataPool) != 0 {
-					if len(dataPool) > 0 {
+					if len(dataPool) > 100 {
 						log.Debugf("任务数 %d 执行", len(dataPool))
 						err := BulkAdd(dataPool)
 						if err != nil {

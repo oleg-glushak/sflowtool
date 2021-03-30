@@ -13,7 +13,7 @@ import (
 func ParseSflowV5ToEs(sample *sflowV5.FlowSamples, counter *sflowV5.SFlowCounterSample) (string, error) {
 	if sample != nil {
 		result := common.MapStr{}
-		result["@timestamp"] = fmt.Sprintf("%s+0200", time.Now().Format("2006-01-02T15:04:05"))
+		result["@timestamp"] = fmt.Sprintf("%s+0000", time.Now().Format("2006-01-02T15:04:05"))
 		result["@version"] = "4.0.3"
 		result["type"] = "sflow"
 		//result["transport"] = "udp"
