@@ -13,134 +13,165 @@ import (
 func ParseSflowV5ToEs(sample *sflowV5.FlowSamples, counter *sflowV5.SFlowCounterSample) (string, error) {
 	if sample != nil {
 		result := common.MapStr{}
-		// result["@timestamp"] = time.Now().Format("2006-01-02T15:04:05.000Z")
-		result["@timestamp"] = fmt.Sprintf("%s+0800", time.Now().Format("2006-01-02T15:04:05"))
+		result["@timestamp"] = fmt.Sprintf("%s+0200", time.Now().Format("2006-01-02T15:04:05"))
+		result["@version"] = "4.0.3"
 		result["type"] = "sflow"
-		result["transport"] = "udp"
-		result["src"] = sample.Data.Datagram.SrcMac
-		result["dst"] = sample.Data.Datagram.DstMac
-		result["status"] = "ok"
-		result["notes"] = "sample"
+		//result["transport"] = "udp"
+		//result["src"] = sample.Data.Datagram.SrcMac
+		//result["dst"] = sample.Data.Datagram.DstMac
+		//result["status"] = "ok"
+		//result["notes"] = "sample"
 
-		sflowEvent := common.MapStr{}
-		result["sflow"] = sflowEvent
+		//sflowEvent := common.MapStr{}
+		//result["sflow"] = sflowEvent
 
 		//sflow agent info
-		result["Datagram"] = common.MapStr{
-			"IPLength": 4,
-			"SrcIP":    sample.Data.Datagram.SrcIP,
-			"DstIP":    sample.Data.Datagram.DstIP,
-			"SrcPort":  sample.Data.Datagram.SrcPort,
-			"DstPort":  sample.Data.Datagram.DstPort,
+		result["agent"] = common.MapStr{
+			"hostname": "myhostname",
+			"id":       "elastiflow-go",
+			"name":     "elastiflow-go",
+			"type":     "go",
+			"version":  "4.0.1",
+			//"SrcIP":    sample.Data.Datagram.SrcIP,
+			//"DstIP":    sample.Data.Datagram.DstIP,
+			//"SrcPort":  sample.Data.Datagram.SrcPort,
+			//"DstPort":  sample.Data.Datagram.DstPort,
+		}
+
+		result["host"] = common.MapStr{
+			"ip":   sample.Data.AgentAddress,
+			"name": sample.Data.AgentAddress,
 		}
 
 		//SFlow info
-		// result["type"] = "sample"
-		result["DatagramVersion"] = sample.Data.DatagramVersion
-		result["AgentAddress"] = sample.Data.AgentAddress
-		result["SubAgentID"] = sample.Data.SubAgentID
-		result["SequenceNumber"] = sample.Data.SequenceNumber
-		result["AgentUptime"] = sample.Data.AgentUptime
-		result["SampleCount"] = sample.Data.SampleCount
-		result["EnterpriseID"] = sample.EnterpriseID
-		result["Format"] = sample.Format
-		result["SampleLength"] = sample.SampleLength
-		result["SequenceNumber"] = sample.SequenceNumber
-		result["SourceIDClass"] = sample.SourceIDClass
-		result["SourceIDIndex"] = sample.SourceIDIndex
-		result["SamplingRate"] = sample.SamplingRate
-		result["SamplePool"] = sample.SamplePool
-		result["Dropped"] = sample.Dropped
-		result["InputInterfaceFormat"] = sample.InputInterfaceFormat
-		result["InputInterface"] = sample.InputInterface
-		result["OutputInterfaceFormat"] = sample.OutputInterfaceFormat
-		result["OutputInterface"] = sample.OutputInterface
-		result["RecordCount"] = sample.RecordCount
+		//result["DatagramVersion"] = sample.Data.DatagramVersion
+		//result["AgentAddress"] = sample.Data.AgentAddress
+		//result["SubAgentID"] = sample.Data.SubAgentID
+		//result["SequenceNumber"] = sample.Data.SequenceNumber
+		//result["AgentUptime"] = sample.Data.AgentUptime
+		//result["SampleCount"] = sample.Data.SampleCount
+		//result["EnterpriseID"] = sample.EnterpriseID
+		//result["Format"] = sample.Format
+		//result["SampleLength"] = sample.SampleLength
+		//result["SequenceNumber"] = sample.SequenceNumber
+		//result["SourceIDClass"] = sample.SourceIDClass
+		//result["SourceIDIndex"] = sample.SourceIDIndex
+		//result["SamplingRate"] = sample.SamplingRate
+		//result["SamplePool"] = sample.SamplePool
+		//result["Dropped"] = sample.Dropped
+		//result["InputInterfaceFormat"] = sample.InputInterfaceFormat
+		//result["InputInterface"] = sample.InputInterface
+		//result["OutputInterfaceFormat"] = sample.OutputInterfaceFormat
+		//result["OutputInterface"] = sample.OutputInterface
+		//result["RecordCount"] = sample.RecordCount
 
 		//SFlowRawPacketFlowRecord
-		result["SFlowRawPacketFlowRecord"] = common.MapStr{
-			"SFlowBaseFlowRecord": common.MapStr{
-				"EnterpriseID":   sample.SFlowRawPacketFlowRecord.SFlowBaseFlowRecord.EnterpriseID,
-				"Format":         sample.SFlowRawPacketFlowRecord.SFlowBaseFlowRecord.Format,
-				"FlowDataLength": sample.SFlowRawPacketFlowRecord.SFlowBaseFlowRecord.FlowDataLength,
-			},
-			"HeaderProtocol": sample.SFlowRawPacketFlowRecord.HeaderProtocol,
-			"FrameLength":    sample.SFlowRawPacketFlowRecord.FrameLength,
-			"PayloadRemoved": sample.SFlowRawPacketFlowRecord.PayloadRemoved,
-			"HeaderLength":   sample.SFlowRawPacketFlowRecord.HeaderLength,
-			"Header": common.MapStr{
-				"FlowRecords":   sample.SFlowRawPacketFlowRecord.Header.FlowRecords,
-				"Packets":       sample.SFlowRawPacketFlowRecord.Header.Packets,
-				"Bytes":         sample.SFlowRawPacketFlowRecord.Header.Bytes,
-				"RateBytes":     sample.SFlowRawPacketFlowRecord.Header.RateBytes,
-				"SrcMac":        sample.SFlowRawPacketFlowRecord.Header.SrcMac,
-				"DstMac":        sample.SFlowRawPacketFlowRecord.Header.DstMac,
-				"SrcIP":         sample.SFlowRawPacketFlowRecord.Header.SrcIP,
-				"DstIP":         sample.SFlowRawPacketFlowRecord.Header.DstIP,
-				"Ipv4_version":  sample.SFlowRawPacketFlowRecord.Header.Ipv4_version,
-				"Ipv4_ihl":      sample.SFlowRawPacketFlowRecord.Header.Ipv4_ihl,
-				"Ipv4_tos":      sample.SFlowRawPacketFlowRecord.Header.Ipv4_tos,
-				"Ipv4_ttl":      sample.SFlowRawPacketFlowRecord.Header.Ipv4_ttl,
-				"Ipv4_protocol": sample.SFlowRawPacketFlowRecord.Header.Ipv4_protocol,
-				"SrcPort":       sample.SFlowRawPacketFlowRecord.Header.SrcPort,
-				"DstPort":       sample.SFlowRawPacketFlowRecord.Header.DstPort,
-			},
-		}
+		//result["SFlowRawPacketFlowRecord"] = common.MapStr{
+		//	"SFlowBaseFlowRecord": common.MapStr{
+		//		"EnterpriseID":   sample.SFlowRawPacketFlowRecord.SFlowBaseFlowRecord.EnterpriseID,
+		//		"Format":         sample.SFlowRawPacketFlowRecord.SFlowBaseFlowRecord.Format,
+		//		"FlowDataLength": sample.SFlowRawPacketFlowRecord.SFlowBaseFlowRecord.FlowDataLength,
+		//	},
+		//	"HeaderProtocol": sample.SFlowRawPacketFlowRecord.HeaderProtocol,
+		//	"FrameLength":    sample.SFlowRawPacketFlowRecord.FrameLength,
+		//	"PayloadRemoved": sample.SFlowRawPacketFlowRecord.PayloadRemoved,
+		//	"HeaderLength":   sample.SFlowRawPacketFlowRecord.HeaderLength,
+		//	"Header": common.MapStr{
+		//		"FlowRecords":   sample.SFlowRawPacketFlowRecord.Header.FlowRecords,
+		//		"Packets":       sample.SFlowRawPacketFlowRecord.Header.Packets,
+		//		"Bytes":         sample.SFlowRawPacketFlowRecord.Header.Bytes,
+		//		"RateBytes":     sample.SFlowRawPacketFlowRecord.Header.RateBytes,
+		//		"SrcMac":        sample.SFlowRawPacketFlowRecord.Header.SrcMac,
+		//		"DstMac":        sample.SFlowRawPacketFlowRecord.Header.DstMac,
+		//		"SrcIP":         sample.SFlowRawPacketFlowRecord.Header.SrcIP,
+		//		"DstIP":         sample.SFlowRawPacketFlowRecord.Header.DstIP,
+		//		"Ipv4_version":  sample.SFlowRawPacketFlowRecord.Header.Ipv4_version,
+		//		"Ipv4_ihl":      sample.SFlowRawPacketFlowRecord.Header.Ipv4_ihl,
+		//		"Ipv4_tos":      sample.SFlowRawPacketFlowRecord.Header.Ipv4_tos,
+		//		"Ipv4_ttl":      sample.SFlowRawPacketFlowRecord.Header.Ipv4_ttl,
+		//		"Ipv4_protocol": sample.SFlowRawPacketFlowRecord.Header.Ipv4_protocol,
+		//		"SrcPort":       sample.SFlowRawPacketFlowRecord.Header.SrcPort,
+		//		"DstPort":       sample.SFlowRawPacketFlowRecord.Header.DstPort,
+		//	},
+		//}
 
 		//SFlowExtendedSwitchFlowRecord
-		result["SFlowExtendedSwitchFlowRecord"] = common.MapStr{
-			"SFlowBaseFlowRecord": common.MapStr{
-				"EnterpriseID":   sample.SFlowExtendedSwitchFlowRecord.SFlowBaseFlowRecord.EnterpriseID,
-				"Format":         sample.SFlowExtendedSwitchFlowRecord.SFlowBaseFlowRecord.Format,
-				"FlowDataLength": sample.SFlowExtendedSwitchFlowRecord.SFlowBaseFlowRecord.FlowDataLength,
-			},
-			"IncomingVLAN":         sample.SFlowExtendedSwitchFlowRecord.IncomingVLAN,
-			"IncomingVLANPriority": sample.SFlowExtendedSwitchFlowRecord.IncomingVLANPriority,
-			"OutgoingVLAN":         sample.SFlowExtendedSwitchFlowRecord.OutgoingVLAN,
-			"OutgoingVLANPriority": sample.SFlowExtendedSwitchFlowRecord.OutgoingVLANPriority,
-		}
+		//result["SFlowExtendedSwitchFlowRecord"] = common.MapStr{
+		//	"SFlowBaseFlowRecord": common.MapStr{
+		//		"EnterpriseID":   sample.SFlowExtendedSwitchFlowRecord.SFlowBaseFlowRecord.EnterpriseID,
+		//		"Format":         sample.SFlowExtendedSwitchFlowRecord.SFlowBaseFlowRecord.Format,
+		//		"FlowDataLength": sample.SFlowExtendedSwitchFlowRecord.SFlowBaseFlowRecord.FlowDataLength,
+		//	},
+		//	"IncomingVLAN":         sample.SFlowExtendedSwitchFlowRecord.IncomingVLAN,
+		//	"IncomingVLANPriority": sample.SFlowExtendedSwitchFlowRecord.IncomingVLANPriority,
+		//	"OutgoingVLAN":         sample.SFlowExtendedSwitchFlowRecord.OutgoingVLAN,
+		//	"OutgoingVLANPriority": sample.SFlowExtendedSwitchFlowRecord.OutgoingVLANPriority,
+		//}
 
 		//SFlowExtendedRouterFlowRecord
-		result["SFlowExtendedRouterFlowRecord"] = common.MapStr{
-			"SFlowBaseFlowRecord": common.MapStr{
-				"EnterpriseID":   sample.SFlowExtendedRouterFlowRecord.SFlowBaseFlowRecord.EnterpriseID,
-				"Format":         sample.SFlowExtendedRouterFlowRecord.SFlowBaseFlowRecord.Format,
-				"FlowDataLength": sample.SFlowExtendedRouterFlowRecord.SFlowBaseFlowRecord.FlowDataLength,
+		//result["SFlowExtendedRouterFlowRecord"] = common.MapStr{
+		//	"SFlowBaseFlowRecord": common.MapStr{
+		//		"EnterpriseID":   sample.SFlowExtendedRouterFlowRecord.SFlowBaseFlowRecord.EnterpriseID,
+		//		"Format":         sample.SFlowExtendedRouterFlowRecord.SFlowBaseFlowRecord.Format,
+		//		"FlowDataLength": sample.SFlowExtendedRouterFlowRecord.SFlowBaseFlowRecord.FlowDataLength,
+		//	},
+		//	"NextHop":                sample.SFlowExtendedRouterFlowRecord.NextHop,
+		//	"NextHopSourceMask":      sample.SFlowExtendedRouterFlowRecord.NextHopSourceMask,
+		//	"NextHopDestinationMask": sample.SFlowExtendedRouterFlowRecord.NextHopDestinationMask,
+		//}
+
+		result["source"] = common.MapStr{
+			"as": common.MapStr{
+				"number": sample.SFlowExtendedGatewayFlowRecord.SourceAS,
 			},
-			"NextHop":                sample.SFlowExtendedRouterFlowRecord.NextHop,
-			"NextHopSourceMask":      sample.SFlowExtendedRouterFlowRecord.NextHopSourceMask,
-			"NextHopDestinationMask": sample.SFlowExtendedRouterFlowRecord.NextHopDestinationMask,
+			"ip":   sample.Data.Datagram.SrcIP,
+			"port": sample.Data.Datagram.SrcPort,
+			"mac":  sample.Data.Datagram.SrcMac,
 		}
 
-		//SFlowExtendedGatewayFlowRecord
-		result["SFlowExtendedGatewayFlowRecord"] = common.MapStr{
-			"SFlowBaseFlowRecord": common.MapStr{
-				"EnterpriseID":   sample.SFlowExtendedGatewayFlowRecord.SFlowBaseFlowRecord.EnterpriseID,
-				"Format":         sample.SFlowExtendedGatewayFlowRecord.SFlowBaseFlowRecord.Format,
-				"FlowDataLength": sample.SFlowExtendedGatewayFlowRecord.SFlowBaseFlowRecord.FlowDataLength,
+		result["destination"] = common.MapStr{
+			"as": common.MapStr{
+				"number": sample.SFlowExtendedGatewayFlowRecord.AS,
 			},
-			"NextHop":     sample.SFlowExtendedGatewayFlowRecord.NextHop,
-			"AS":          sample.SFlowExtendedGatewayFlowRecord.AS,
-			"SourceAS":    sample.SFlowExtendedGatewayFlowRecord.SourceAS,
-			"PeerAS":      sample.SFlowExtendedGatewayFlowRecord.PeerAS,
-			"ASPathCount": sample.SFlowExtendedGatewayFlowRecord.ASPathCount,
-			"ASPath":      sample.SFlowExtendedGatewayFlowRecord.ASPath,
-			"Communities": sample.SFlowExtendedGatewayFlowRecord.Communities,
-			"LocalPref":   sample.SFlowExtendedGatewayFlowRecord.LocalPref,
+			"ip":   sample.Data.Datagram.DstIP,
+			"port": sample.Data.Datagram.DstPort,
+			"mac":  sample.Data.Datagram.DstMac,
 		}
+
+		result["flow"] = common.MapStr{
+			"input_ifname":      sample.InputInterface,
+			"output_ifname":     sample.OutputInterface,
+			"sampling_interval": sample.SamplingRate,
+		}
+		//SFlowExtendedGatewayFlowRecord
+		//result["SFlowExtendedGatewayFlowRecord"] = common.MapStr{
+		//	"SFlowBaseFlowRecord": common.MapStr{
+		//		"EnterpriseID":   sample.SFlowExtendedGatewayFlowRecord.SFlowBaseFlowRecord.EnterpriseID,
+		//		"Format":         sample.SFlowExtendedGatewayFlowRecord.SFlowBaseFlowRecord.Format,
+		//		"FlowDataLength": sample.SFlowExtendedGatewayFlowRecord.SFlowBaseFlowRecord.FlowDataLength,
+		//	},
+		//	"NextHop":     sample.SFlowExtendedGatewayFlowRecord.NextHop,
+		//	"AS":          sample.SFlowExtendedGatewayFlowRecord.AS,
+		//	"SourceAS":    sample.SFlowExtendedGatewayFlowRecord.SourceAS,
+		//	"PeerAS":      sample.SFlowExtendedGatewayFlowRecord.PeerAS,
+		//	"ASPathCount": sample.SFlowExtendedGatewayFlowRecord.ASPathCount,
+		//	"ASPath":      sample.SFlowExtendedGatewayFlowRecord.ASPath,
+		//	"Communities": sample.SFlowExtendedGatewayFlowRecord.Communities,
+		//	"LocalPref":   sample.SFlowExtendedGatewayFlowRecord.LocalPref,
+		//}
 
 		//SFlowExtendedUserFlow
-		result["SFlowExtendedUserFlow"] = common.MapStr{
-			"SFlowBaseFlowRecord": common.MapStr{
-				"EnterpriseID":   sample.SFlowExtendedUserFlow.SFlowBaseFlowRecord.EnterpriseID,
-				"Format":         sample.SFlowExtendedUserFlow.SFlowBaseFlowRecord.Format,
-				"FlowDataLength": sample.SFlowExtendedUserFlow.SFlowBaseFlowRecord.FlowDataLength,
-			},
-			"SourceCharSet":      sample.SFlowExtendedUserFlow.SourceCharSet,
-			"SourceUserID":       sample.SFlowExtendedUserFlow.SourceUserID,
-			"DestinationCharSet": sample.SFlowExtendedUserFlow.DestinationCharSet,
-			"DestinationUserID":  sample.SFlowExtendedUserFlow.DestinationUserID,
-		}
+		//result["SFlowExtendedUserFlow"] = common.MapStr{
+		//	"SFlowBaseFlowRecord": common.MapStr{
+		//		"EnterpriseID":   sample.SFlowExtendedUserFlow.SFlowBaseFlowRecord.EnterpriseID,
+		//		"Format":         sample.SFlowExtendedUserFlow.SFlowBaseFlowRecord.Format,
+		//		"FlowDataLength": sample.SFlowExtendedUserFlow.SFlowBaseFlowRecord.FlowDataLength,
+		//	},
+		//	"SourceCharSet":      sample.SFlowExtendedUserFlow.SourceCharSet,
+		//	"SourceUserID":       sample.SFlowExtendedUserFlow.SourceUserID,
+		//	"DestinationCharSet": sample.SFlowExtendedUserFlow.DestinationCharSet,
+		//	"DestinationUserID":  sample.SFlowExtendedUserFlow.DestinationUserID,
+		//}
 		data, err := json.Marshal(result)
 		if err != nil {
 			return "", err
@@ -150,7 +181,7 @@ func ParseSflowV5ToEs(sample *sflowV5.FlowSamples, counter *sflowV5.SFlowCounter
 
 	if counter != nil {
 		fields := common.MapStr{}
-		fields["@timestamp"] = fmt.Sprintf("%s+0800", time.Now().Format("2006-01-02T15:04:05"))
+		fields["@timestamp"] = fmt.Sprintf("%s+0200", time.Now().Format("2006-01-02T15:04:05"))
 		fields["type"] = "sflow"
 		fields["transport"] = "udp"
 		fields["src"] = counter.Data.Datagram.SrcMac

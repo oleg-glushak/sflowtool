@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
+	elastic "github.com/olivere/elastic"
 	log "github.com/sirupsen/logrus"
-	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 // Tweet is a structure used for serializing/deserializing data in Elasticsearch.
@@ -28,7 +28,7 @@ func BulkAdd(data []string) error {
 	bulkRequest := client.Bulk()
 	for n, x := range data {
 		log.Debugf("%s %d 装载批量弹药 %d Pool %d", fmt.Sprintf("ABC%d%d", time.Now().UnixNano(), n), n, len(DataChannel), len(dataPool))
-		req := elastic.NewBulkIndexRequest().Index(index).Type("doc").Id(fmt.Sprintf("ABC%d%d", time.Now().UnixNano(), n)).Doc(x)
+		req := elastic.NewBulkIndexRequest().Index(index).Id(fmt.Sprintf("ABC%d%d", time.Now().UnixNano(), n)).Doc(x)
 		bulkRequest = bulkRequest.Add(req)
 	}
 	bulkResponse, err := bulkRequest.Do(context.Background())
@@ -60,7 +60,7 @@ func InitEs(hostUrl, indexName string) {
 				mutex.Unlock()
 			case <-time.After(time.Nanosecond * 100):
 				if len(dataPool) != 0 {
-					if len(dataPool) > 100 {
+					if len(dataPool) > 0 {
 						log.Debugf("任务数 %d 执行", len(dataPool))
 						err := BulkAdd(dataPool)
 						if err != nil {
@@ -94,7 +94,7 @@ func InitEs(hostUrl, indexName string) {
 	}
 	log.Infof("Elasticsearch version %s\n", esversion)
 
-	index = fmt.Sprintf("%s-%s", indexName, time.Now().Format("2006-01-02"))
+	index = fmt.Sprintf("%s-%s", indexName, time.Now().Format("2006.01.02"))
 	exists, err := client.IndexExists(index).Do(context.Background())
 	if err != nil {
 		// Handle error
